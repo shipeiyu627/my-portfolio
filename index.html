@@ -3,58 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人作品集</title>
+    <title>我的全自动作品集</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .work-card:hover img { transform: scale(1.05); }
+        .loading-spinner { border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-gray-50">
 
-    <header class="py-12 text-center bg-white shadow-sm">
-        <h1 class="text-4xl font-extrabold tracking-tight">MY PORTFOLIO</h1>
-        <p class="mt-2 text-gray-500">欢迎来到我的创意世界</p>
+    <header class="py-16 text-center bg-white shadow-sm">
+        <h1 class="text-4xl font-bold tracking-tight text-gray-900">AUTO PORTFOLIO</h1>
+        <p class="mt-2 text-gray-500">上传照片到 GitHub 文件夹，网页将自动更新</p>
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-
-            <div class="work-card group bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl">
-                <div class="overflow-hidden h-64">
-                    <img src="photo/Project1/1.jpg" alt="作品1" class="w-full h-full object-cover transition duration-500">
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold">作品系列 01</h3>
-                    <p class="text-gray-500 mt-2 text-sm">点击查看更多关于该项目的内容</p>
-                </div>
-            </div>
-
-            <div class="work-card group bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl">
-                <div class="overflow-hidden h-64">
-                    <img src="photo/Project2/1.jpg" alt="作品2" class="w-full h-full object-cover transition duration-500">
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold">作品系列 02</h3>
-                    <p class="text-gray-500 mt-2 text-sm">简洁的设计理念展示</p>
-                </div>
-            </div>
-
-            <div class="work-card group bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl">
-                <div class="overflow-hidden h-64">
-                    <img src="photo/Project3/1.jpg" alt="作品3" class="w-full h-full object-cover transition duration-500">
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold">作品系列 03</h3>
-                    <p class="text-gray-500 mt-2 text-sm">探索光影与色彩的结合</p>
-                </div>
-            </div>
-
+        <div id="loading" class="flex justify-center items-center space-x-2 text-gray-500">
+            <div class="loading-spinner"></div>
+            <span>正在同步 GitHub 照片...</span>
         </div>
+
+        <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"></div>
     </main>
 
-    <footer class="py-12 border-t border-gray-200 text-center text-gray-400 text-sm">
-        <p>&copy; 2026 由 Gemini 与 GitHub 共同构建</p>
-    </footer>
+    <script>
+        // 【核心配置：请修改这里】
+        const GITHUB_USER = 'shipelyu627'; 
+        const REPO_NAME = 'my-portfolio';
+        const PHOTO_PATH = 'photo'; // 你的照片文件夹名字
 
+        async function fetchPortfolio() {
+            const grid = document.getElementById('portfolio-grid');
+            const loading = document.getElementById('loading');
+            
+            try {
+                // 向 GitHub API 发起请求，获取文件夹内的文件列表
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}/contents/${PHOTO_PATH}`);
+                const items = await response.json();
+
+                loading.style.display = 'none';
+
+                items.forEach(item => {
+                    // 只处理文件夹 (Sub-directories)
+                    if (item.type === 'dir') {
+                        const card = document.createElement('div');
+                        card.className = "bg-white rounded-2xl overflow-hidden shadow-lg transition-all hover:shadow-2xl hover:-translate-y-1 duration-300";
+                        
+                        // 假设每个子文件夹里都有一张 1.jpg 作为封面
+                        const imageUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${REPO_NAME}/main/${item.path}/1.jpg`;
+                        
+                        card.innerHTML = `
+                            <div class="h-64 overflow-hidden bg-gray-200">
+                                <img src="${imageUrl}" alt="${item.name}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=Wait+for+Image...'">
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
+                                <p class="text-sm text-gray-400 mt-1 uppercase tracking-widest">Project Folder</p>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    }
+                });
+            } catch (error) {
+                console.error('获取失败:', error);
+                loading.innerText = "加载失败，请检查仓库配置。";
+            }
+        }
+
+        fetchPortfolio();
+    </script>
 </body>
 </html>
