@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人作品集</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .work-card:hover img { transform: scale(1.05); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+    <header class="py-12 text-center bg-white shadow-sm">
+        <h1 class="text-4xl font-extrabold tracking-tight">MY PORTFOLIO</h1>
+        <p class="mt-2 text-gray-500">欢迎来到我的创意世界</p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            <div class="work-card group bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl">
+                <div class="overflow-hidden h-64">
+                    <img src="photo/Project1/1.jpg" alt="作品1" class="w-full h-full object-cover transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold">作品系列 01</h3>
+                    <p class="text-gray-500 mt-2 text-sm">点击查看更多关于该项目的内容</p>
+                </div>
+            </div>
+
+            <div class="work-card group bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl">
+                <div class="overflow-hidden h-64">
+                    <img src="photo/Project2/1.jpg" alt="作品2" class="w-full h-full object-cover transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold">作品系列 02</h3>
+                    <p class="text-gray-500 mt-2 text-sm">简洁的设计理念展示</p>
+                </div>
+            </div>
+
+            <div class="work-card group bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl">
+                <div class="overflow-hidden h-64">
+                    <img src="photo/Project3/1.jpg" alt="作品3" class="w-full h-full object-cover transition duration-500">
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold">作品系列 03</h3>
+                    <p class="text-gray-500 mt-2 text-sm">探索光影与色彩的结合</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-12 border-t border-gray-200 text-center text-gray-400 text-sm">
+        <p>&copy; 2026 由 Gemini 与 GitHub 共同构建</p>
+    </footer>
+
+</body>
+</html>
